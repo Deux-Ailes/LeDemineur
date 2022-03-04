@@ -30,19 +30,21 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
         this.width = size.x;
         this.height = size.y;
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
 
         // Creating X rows
-       createGrid(8);
+        createGrid(10);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag: listeLigne) {
             ft.add(R.id.containerLigne,frag,null);
         }
         ft.commit();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        setupBombs(listeLigne,0);
     }
 
     // Creates a grid of side * side size
@@ -56,28 +58,24 @@ public class MainActivity extends AppCompatActivity {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(ArrayList<FragLigne> liste, int difficulty){
-        int nbBombs = (difficulty+1 *10)*(difficulty+1);
-        int nbCells = liste.get(0).getListCells().size(), nbRows = liste.size();//-1 ?
-        int notRoundCount = nbBombs%nbCells;
-        int bombeTemp = nbBombs;
+        int nbBombs = ((difficulty+1) *10);
         for (int i=0; i<nbBombs;i++) {
-
+            randomBombCell(liste);
         }
-
     }
 
-    // Launch a new activity to select difficulty and seeing highest scores (5)
+    // Launch a new activity to select difficulty and show highest scores (5)
     private void selectDifficulty(){
 
     }
 
     private void randomBombCell(ArrayList<FragLigne> liste){
-        int min = 0, maxCell = liste.get(0).getListCells().size(), maxRow= liste.size();
-        int randomCell = ThreadLocalRandom.current().nextInt(min, maxCell);
-        int randomRow = ThreadLocalRandom.current().nextInt(min, maxRow);
+        int min = 0, maxCell = liste.size();
+        int randomCell = ThreadLocalRandom.current().nextInt(min, maxCell-1);
+        int randomRow = ThreadLocalRandom.current().nextInt(min, maxCell-1);
         FragCellule frag = liste.get(randomRow).getListCells().get(randomCell);
         if(frag.getState()==""){
-            frag.setState("Bomb");
+            frag.becomeBomb();
         }else{
             randomBombCell(liste);
         }

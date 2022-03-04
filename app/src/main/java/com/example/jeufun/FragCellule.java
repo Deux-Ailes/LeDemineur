@@ -81,7 +81,7 @@ public class FragCellule extends Fragment {
 
                 default:
                     // That's shit.
-                    this.cellImage.setImageResource(R.drawable.ok);
+                    this.cellImage.setImageResource(R.drawable.facingdown);
             }
         });
         return view;
@@ -101,5 +101,10 @@ public class FragCellule extends Fragment {
 
     public void setState(String state){
         this.state = state;
+    }
+
+    public void becomeBomb(){
+        this.state="Bomb";
+        this.cellImage.setImageResource(R.drawable.bomb);
     }
 }
