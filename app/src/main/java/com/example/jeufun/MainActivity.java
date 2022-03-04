@@ -9,12 +9,13 @@ import android.view.Display;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout container;
     private ArrayList<FragLigne> listeLigne;
-    public int width;
-    public int height;
+    public static int width; // Width of the device
+    public static int height; // Height of the device
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +45,41 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    private void createGrid(int cote){
+    // Creates a grid of side * side size
+    private void createGrid(int side){
         listeLigne.clear();
-        for(int i=0; i<cote;i++){
-            listeLigne.add(FragLigne.newInstance(cote,i));
+        for(int i=0; i<side;i++){
+            listeLigne.add(FragLigne.newInstance(side,i));
+        }
+    }
+
+    // Set up all the bombs according to the difficulty level
+    // 0 : EASY / 1 : MEDIUM / 2 : HARD
+    private void setupBombs(ArrayList<FragLigne> liste, int difficulty){
+        int nbBombs = (difficulty+1 *10)*(difficulty+1);
+        int nbCells = liste.get(0).getListCells().size(), nbRows = liste.size();//-1 ?
+        int notRoundCount = nbBombs%nbCells;
+        int bombeTemp = nbBombs;
+        for (int i=0; i<nbBombs;i++) {
+
+        }
+
+    }
+
+    // Launch a new activity to select difficulty and seeing highest scores (5)
+    private void selectDifficulty(){
+
+    }
+
+    private void randomBombCell(ArrayList<FragLigne> liste){
+        int min = 0, maxCell = liste.get(0).getListCells().size(), maxRow= liste.size();
+        int randomCell = ThreadLocalRandom.current().nextInt(min, maxCell);
+        int randomRow = ThreadLocalRandom.current().nextInt(min, maxRow);
+        FragCellule frag = liste.get(randomRow).getListCells().get(randomCell);
+        if(frag.getState()==""){
+            frag.setState("Bomb");
+        }else{
+            randomBombCell(liste);
         }
     }
 }

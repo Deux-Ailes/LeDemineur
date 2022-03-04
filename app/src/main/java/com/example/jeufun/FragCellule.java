@@ -16,12 +16,10 @@ import android.widget.ImageView;
  */
 public class FragCellule extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "state";
     private static final String ARG_PARAM2 = "value";
 
-    // TODO: Rename and change types of parameters
     private String state; // State of the cell
     private String value; // Number of bombs around or if is bomb
     private boolean isDiscovered;
@@ -31,14 +29,6 @@ public class FragCellule extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-
-     * @return A new instance of fragment FragCellule.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragCellule newInstance(String state, String value) {
         FragCellule fragment = new FragCellule();
         Bundle args = new Bundle();
@@ -64,6 +54,12 @@ public class FragCellule extends Fragment {
         View view = inflater.inflate(R.layout.fragment_frag_cellule, container, false);
         this.cellImage = view.findViewById(R.id.cell);
         this.cellImage.setOnClickListener(v->{
+            // Check if the cell is already discovered
+            // If yes nothing
+            // If not :
+            //  If bomb Game Over and discovered
+            //  If 0 shows empty cells around
+            //  Else display the number of bombs around it
             switch (this.value){
                 case "b":
                     // Game over
@@ -89,5 +85,21 @@ public class FragCellule extends Fragment {
             }
         });
         return view;
+    }
+
+    public String getValue(){
+        return this.value;
+    }
+
+    public void setValue(String valeur){
+        this.value = valeur;
+    }
+
+    public String getState(){
+        return this.state;
+    }
+
+    public void setState(String state){
+        this.state = state;
     }
 }

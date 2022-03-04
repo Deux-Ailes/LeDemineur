@@ -69,7 +69,7 @@ public class FragLigne extends Fragment {
         //Cell creations
         for (int i=0; i<this.nombreCellules;i++){
             // Creating there the cells with passiv state. Instanciation
-            listeCellule.add(FragCellule.newInstance("",""));
+            listeCellule.add(FragCellule.newInstance("Hidden",""));
         }
         for (FragCellule frag: listeCellule) {
             ft.add(R.id.containerCellule,frag,null);
