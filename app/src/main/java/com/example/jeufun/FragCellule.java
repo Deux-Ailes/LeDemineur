@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,9 +62,6 @@ public class FragCellule extends Fragment {
             //  If 0 shows empty cells around
             //  Else display the number of bombs around it
             switch (this.value){
-                case "b":
-                    // Game over
-                    break;
                 case "0":
                     // Check if other cells are equals to zero around it
                     break;
@@ -78,10 +76,10 @@ public class FragCellule extends Fragment {
                     break;
                 case "5":
                     break;
-
                 default:
                     // That's shit.
-                    this.cellImage.setImageResource(R.drawable.facingdown);
+                    if (this.getState()=="Bomb") Log.e("Fatal", "Une bombe a été touchée");
+                    else this.cellImage.setImageResource(R.drawable.facingdown);
             }
         });
         return view;

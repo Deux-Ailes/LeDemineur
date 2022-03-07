@@ -5,10 +5,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         container = findViewById(R.id.containerLigne);
         listeLigne = new ArrayList<>();
-
         // Getting the global dimension of the device
         // in order to put the right size for the cells and rows
         Display display = getWindowManager().getDefaultDisplay();
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupBombs(ArrayList<FragLigne> liste, int difficulty){
         int nbBombs = ((difficulty+1) *10);
         for (int i=0; i<nbBombs;i++) {
-            randomBombCell(liste);
+            while(!randomBombCell(liste));
         }
     }
 
@@ -69,15 +70,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void randomBombCell(ArrayList<FragLigne> liste){
+    private boolean randomBombCell(ArrayList<FragLigne> liste){
+        Random r = new Random();
+        Random r2 = new Random();
         int min = 0, maxCell = liste.size();
-        int randomCell = ThreadLocalRandom.current().nextInt(min, maxCell-1);
-        int randomRow = ThreadLocalRandom.current().nextInt(min, maxCell-1);
+        //int randomCell = min+ (int)Math.random() * ((maxCell -min) +1);
+
+        int randomCell = r.nextInt(maxCell);
+        int randomRow = r2.nextInt(maxCell);
+        //int randomRow = min+ (int)Math.random() * ((maxCell -min) +1);
+        //int randomCelle = ThreadLocalRandom.current().nextInt(min, maxCell-1);
+        //int randomRowe = ThreadLocalRandom.current().nextInt(min, maxCell-1);
         FragCellule frag = liste.get(randomRow).getListCells().get(randomCell);
-        if(frag.getState()==""){
+        Log.e("La cellule visée en ", randomRow + ","+ randomCell + " ... " + String.valueOf(frag.getState()));
+        if(frag.getState()!="Bomb"){
             frag.becomeBomb();
+            Log.e("gg","");
+            return true;
         }else{
-            randomBombCell(liste);
+            Log.e("Rip","");
+            //randomBombCell(liste);
+            return false;
         }
     }
 }

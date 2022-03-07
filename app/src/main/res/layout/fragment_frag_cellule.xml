@@ -10,7 +10,7 @@
         android:id="@+id/cell"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        app:srcCompat="@drawable/ok"
+        app:srcCompat="@drawable/facingdown"
         tools:src="@tools:sample/avatars" />
 
 </FrameLayout>
