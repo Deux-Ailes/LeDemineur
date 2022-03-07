@@ -79,7 +79,7 @@ public class FragCellule extends Fragment {
                 default:
                     // That's shit.
                     if (this.getState()=="Bomb") Log.e("Fatal", "Une bombe a été touchée");
-                    else this.cellImage.setImageResource(R.drawable.facingdown);
+                    //else this.cellImage.setImageResource(R.drawable.facingdown);
             }
         });
         return view;
@@ -102,7 +102,31 @@ public class FragCellule extends Fragment {
     }
 
     public void becomeBomb(){
-        this.state="Bomb";
+        setState("Bomb");
         this.cellImage.setImageResource(R.drawable.bomb);
+    }
+
+    public void attributionValeur(int nb){
+        setValue(String.valueOf(nb));
+        switch (nb) {
+            case 0:
+                this.cellImage.setImageResource(R.drawable.zero);
+                break;
+            case 1:
+                this.cellImage.setImageResource(R.drawable.one);
+                break;
+            case 2:
+                this.cellImage.setImageResource(R.drawable.two);
+                break;
+            case 3:
+                this.cellImage.setImageResource(R.drawable.three);
+                break;
+            case 4:
+                this.cellImage.setImageResource(R.drawable.four);
+                break;
+            case 5:
+                this.cellImage.setImageResource(R.drawable.five);
+                break;
+        }
     }
 }
