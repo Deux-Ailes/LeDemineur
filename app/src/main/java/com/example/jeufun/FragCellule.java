@@ -21,9 +21,8 @@ public class FragCellule extends Fragment {
     private static final String ARG_PARAM1 = "state";
     private static final String ARG_PARAM2 = "value";
 
-    private String state; // State of the cell
-    private String value; // Number of bombs around or if is bomb
-    private boolean isDiscovered;
+    private String state; // State of the cell (Hidden, Discovered or Bomb)
+    private String value; // Number of bombs around
     private ImageView cellImage; // Is the cell image
 
     public FragCellule() {
@@ -61,29 +60,52 @@ public class FragCellule extends Fragment {
             //  If bomb Game Over and discovered
             //  If 0 shows empty cells around
             //  Else display the number of bombs around it
-            switch (this.value){
-                case "0":
-                    // Check if other cells are equals to zero around it
-                    break;
-                case "1":
-                    // Display a 1
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                case "4":
-                    break;
-                case "5":
-                    break;
-                default:
-                    // That's shit.
-                    if (this.getState()=="Bomb") Log.e("Fatal", "Une bombe a été touchée");
-                    //else this.cellImage.setImageResource(R.drawable.facingdown);
+            if(this.getState()=="Bomb"){
+                Log.e("Game over","C fini");
+            }
+            else{
+                affichageValeur();
+                if (Integer.valueOf(this.value)==0)
+                    ((MainActivity)getActivity()).emptyAround(this);
+                /*switch (Integer.valueOf(this.value)){
+                    case 0:
+                        this.cellImage.setImageResource(R.drawable.zero);
+                        // Check around
+                        ((MainActivity)getActivity()).emptyAround(this);
+                        break;
+                    case 1:
+                        this.cellImage.setImageResource(R.drawable.one);
+                        break;
+                    case 2:
+                        this.cellImage.setImageResource(R.drawable.two);
+                        break;
+                    case 3:
+                        this.cellImage.setImageResource(R.drawable.three);
+                        break;
+                    case 4:
+                        this.cellImage.setImageResource(R.drawable.four);
+                        break;
+                    case 5:
+                        this.cellImage.setImageResource(R.drawable.five);
+                        break;
+                    case 6:
+                        this.cellImage.setImageResource(R.drawable.six);
+                        break;
+                    case 7:
+                        this.cellImage.setImageResource(R.drawable.seven);
+                        break;
+                    case 8:
+                        this.cellImage.setImageResource(R.drawable.eight);
+                        break;
+                    default:
+                        // That's shit.
+
+                }*/
             }
         });
         return view;
     }
+
 
     public String getValue(){
         return this.value;
@@ -99,6 +121,9 @@ public class FragCellule extends Fragment {
 
     public void setState(String state){
         this.state = state;
+        if(state == "Show"){
+            affichageValeur();
+        }
     }
 
     public void becomeBomb(){
@@ -106,9 +131,8 @@ public class FragCellule extends Fragment {
         this.cellImage.setImageResource(R.drawable.bomb);
     }
 
-    public void attributionValeur(int nb){
-        setValue(String.valueOf(nb));
-        switch (nb) {
+    public void affichageValeur(){
+        switch (Integer.valueOf(this.value)) {
             case 0:
                 this.cellImage.setImageResource(R.drawable.zero);
                 break;
@@ -127,6 +151,14 @@ public class FragCellule extends Fragment {
             case 5:
                 this.cellImage.setImageResource(R.drawable.five);
                 break;
+            case 6:
+                this.cellImage.setImageResource(R.drawable.six);
+                break;
+            case 7:
+                this.cellImage.setImageResource(R.drawable.seven);
+                break;
         }
     }
+
+
 }

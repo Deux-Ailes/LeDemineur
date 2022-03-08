@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         height = size.y;
 
         // Creating X rows
-        createGrid(10);
+        createGrid(15);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag: listeLigne) {
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        setupBombs(listeLigne,0);
-        setupValues(listeLigne);
+        setupBombs(1);
+        setupValues();
     }
 
     // Creates a grid of side * side size
@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
-    private void setupBombs(ArrayList<FragLigne> liste, int difficulty){
+    private void setupBombs(int difficulty){
         int nbBombs = ((difficulty+1) *10);
         for (int i=0; i<nbBombs;i++) {
-            while(!randomBombCell(liste));
+            while(!randomBombCell());
         }
     }
 
@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean randomBombCell(ArrayList<FragLigne> liste){
+    private boolean randomBombCell(){
         Random r = new Random();
         Random r2 = new Random();
-        int maxCell = liste.size();
+        int maxCell = listeLigne.size();
         int randomCell = r.nextInt(maxCell);
         int randomRow = r2.nextInt(maxCell);
-        FragCellule frag = liste.get(randomRow).getListCells().get(randomCell);
+        FragCellule frag = listeLigne.get(randomRow).getListCells().get(randomCell);
         Log.e("La cellule visée en ", randomRow + ","+ randomCell + " ... " + String.valueOf(frag.getState()));
         if(frag.getState()!="Bomb"){
             frag.becomeBomb();
@@ -89,14 +89,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupValues(ArrayList<FragLigne> listeDeLignes){
+    private void setupValues(){
         int numLigne =0;
         int numCell = 0;
-        for (FragLigne ligne: listeDeLignes){
+        for (FragLigne ligne: listeLigne){
             numCell =0;
             for( FragCellule cellule: ligne.getListCells()){
-                int nbBombes = bombAround(numLigne,listeDeLignes,numCell);
-                if(cellule.getState()!="Bomb") cellule.attributionValeur(nbBombes);
+                int nbBombes = bombAround(numLigne,numCell);
+                Log.e("NbBombes",String.valueOf(nbBombes));
+                if(cellule.getState()!="Bomb") cellule.setValue(String.valueOf(nbBombes));
                 else Log.e("Je suis une bombinette","");
                 numCell++;
             }
@@ -104,21 +105,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int bombAround(int numLignes, ArrayList<FragLigne> liste, int numCell){
+    private int bombAround(int numLignes, int numCell){
         int nombreBombes = 0;
         int minRow=numLignes-1;
         if(minRow<0) minRow=0;
         int maxRow=numLignes+1;
-        if(maxRow>liste.size()-1) maxRow = liste.size()-1;
+        if(maxRow>listeLigne.size()-1) maxRow = listeLigne.size()-1;
         int minCol=numCell-1;
         if(minCol <0) minCol =0;
         int maxCol = numCell +1;
-        if(maxCol>liste.get(0).getListCells().size()-1) maxCol = liste.get(0).getListCells().size()-1;
+        if(maxCol>listeLigne.get(0).getListCells().size()-1) maxCol = listeLigne.get(0).getListCells().size()-1;
         for(int i=minRow;i<maxRow+1;i++){
             for(int j=minCol;j<maxCol+1;j++){
-                if(liste.get(i).getListCells().get(j).getState()=="Bomb") nombreBombes++;
+                if(listeLigne.get(i).getListCells().get(j).getState()=="Bomb") nombreBombes++;
             }
         }
         return nombreBombes;
+    }
+
+    public void emptyAround(FragCellule cellule){
+        int[] positionCellule = new int[2];
+        int ligne; int colonne;
+        positionCellule = findCell(cellule);
+        ligne = positionCellule[0];
+        colonne = positionCellule[1];
+
+        int minRow=ligne-1;
+        if(minRow<0) minRow=0;
+        int maxRow=ligne+1;
+        if(maxRow>listeLigne.size()-1) maxRow = listeLigne.size()-1;
+        int minCol=colonne-1;
+        if(minCol <0) minCol =0;
+        int maxCol = colonne +1;
+        if(maxCol>listeLigne.get(0).getListCells().size()-1) maxCol = listeLigne.get(0).getListCells().size()-1;
+        Log.e("Position", String.valueOf(positionCellule[0]) + "," + String.valueOf(positionCellule[1]));
+        for(int i=minRow;i<maxRow+1;i++){
+            for(int j=minCol;j<maxCol+1;j++){
+                //if(j!=colonne && i!=ligne){
+                    FragCellule cell =listeLigne.get(i).getListCells().get(j);
+                    if(cell.getState()!="Bomb"){
+                        cell.affichageValeur();
+                        if (cell.getValue()=="0") emptyAround(cell);
+                    }
+                //}
+            }
+        }
+        // Si la cellule autour vaut 0, on reéxecute la méthode
+
+    }
+    private int[] findCell(FragCellule cellule){
+        int [] positions;
+        positions = new int[2];
+        positions[0]=0;
+        for(FragLigne ligne: listeLigne){
+            positions[1]=0;
+            for(FragCellule cell: ligne.getListCells()){
+                if (cell==cellule){
+                    Log.e("Cellule trouvée !!", String.valueOf(positions[0] + "," + String.valueOf(positions[1])));
+                    return positions;
+                }
+                positions[1]++;
+            }
+            positions[0]++;
+        }
+
+        return positions;
     }
 }
