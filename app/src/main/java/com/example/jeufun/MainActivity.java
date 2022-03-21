@@ -9,12 +9,19 @@ import android.util.Log;
 import android.view.Display;
 import android.widget.LinearLayout;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout container;
     private ArrayList<FragLigne> listeLigne;
+    private int difficulty;
+    private int heureDeb = 0;
+    private int minuteDeb = 0;
     public static int width; // Width of the device
     public static int height; // Height of the device
     @Override
@@ -30,10 +37,12 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
         width = size.x;
         height = size.y;
-
+        Calendar dt = Calendar.getInstance();
+        heureDeb = dt.get(Calendar.HOUR_OF_DAY);
+        minuteDeb = dt.get(Calendar.MINUTE);
         // Creating X rows
-        createGrid(15);
-
+        difficulty=1;
+        createGrid(16);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag: listeLigne) {
             ft.add(R.id.containerLigne,frag,null);
@@ -44,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        setupBombs(1);
+        setupBombs(difficulty);
         setupValues();
     }
 
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         positionCellule = findCell(cellule);
         ligne = positionCellule[0];
         colonne = positionCellule[1];
-
+        FragCellule cell;
         int minRow=ligne-1;
         if(minRow<0) minRow=0;
         int maxRow=ligne+1;
@@ -138,21 +147,25 @@ public class MainActivity extends AppCompatActivity {
         if(minCol <0) minCol =0;
         int maxCol = colonne +1;
         if(maxCol>listeLigne.get(0).getListCells().size()-1) maxCol = listeLigne.get(0).getListCells().size()-1;
-        Log.e("Position", String.valueOf(positionCellule[0]) + "," + String.valueOf(positionCellule[1]));
+        //Log.e("Position", String.valueOf(positionCellule[0]) + "," + String.valueOf(positionCellule[1]));
         for(int i=minRow;i<maxRow+1;i++){
             for(int j=minCol;j<maxCol+1;j++){
-                //if(j!=colonne && i!=ligne){
-                    FragCellule cell =listeLigne.get(i).getListCells().get(j);
-                    if(cell.getState()!="Bomb"){
-                        cell.affichageValeur();
-                        if (cell.getValue()=="0") emptyAround(cell);
+                cell =listeLigne.get(i).getListCells().get(j);
+                if(cell.getState()!="Bomb" && cell.getState()!="Show"){
+                    cell.affichageValeur();
+                    cell.setState("Show");
+                    if (isNullCell(cell)) {
+                        emptyAround(cell);
+                        Log.e("CELLULE","VIDE");
                     }
-                //}
+                    else{
+                        Log.e("CELLULE","PAS VIDE");
+                    }
+                }
             }
         }
-        // Si la cellule autour vaut 0, on reéxecute la méthode
-
     }
+
     private int[] findCell(FragCellule cellule){
         int [] positions;
         positions = new int[2];
@@ -170,5 +183,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return positions;
+    }
+
+    private boolean isNullCell(FragCellule cell){
+        //Log.e("CELLULE VALEUR ",String.valueOf(cell.getValue()));
+        if (cell.getValue().equals("0"))return true;
+        return false;
+    }
+
+
+    public void endGame(){
+        boolean finito = true;
+        for(FragLigne ligne : this.listeLigne){
+            for(FragCellule cellule : ligne.getListCells()){
+                if(cellule.getState()!="Bomb" && cellule.getState()!="Show") finito = false;
+            }
+        }
+        if(finito){
+            Log.e("FINITO","GAME IS WON");
+            Calendar dt = Calendar.getInstance();
+            int heureDiff = dt.get(Calendar.HOUR_OF_DAY)- this.heureDeb;
+            heureDiff--;
+            int minuteDiff = dt.get(Calendar.MINUTE) - this.minuteDeb;
+            if(minuteDiff<0) minuteDiff+=60;
+            int timeSpent = heureDiff*60+minuteDiff;
+
+            // TRUC POUR LANCER L ACTIVITE DE FIN DE GAME ET COMPTAGE DE SCORE
+        }
+        else{
+            Log.e("NOT FINITO","GAME IS NOT WON");
+        }
     }
 }

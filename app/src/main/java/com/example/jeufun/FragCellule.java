@@ -53,6 +53,26 @@ public class FragCellule extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_frag_cellule, container, false);
         this.cellImage = view.findViewById(R.id.cell);
+        this.cellImage.setOnLongClickListener(v->{
+            if(this.getState()=="Flagged"){
+                this.cellImage.setImageResource(R.drawable.facingdown);
+                this.setState("Hidden");
+                this.cellImage.getDrawable();
+            }
+            else{
+                this.cellImage.setImageResource(R.drawable.flagged);
+                this.setState("Flagged");
+            }
+
+
+            ///
+            ///
+            /// A RETRAVAILLER POUR LA GESTION DE DRAPEAU SUR UNE BOMBE OU UNE VALEUR (CREER UNE ANCIENNE VALEUR STATIQUE)
+            ///
+            ///
+
+            return true;
+        });
         this.cellImage.setOnClickListener(v->{
             // Check if the cell is already discovered
             // If yes nothing
@@ -62,46 +82,14 @@ public class FragCellule extends Fragment {
             //  Else display the number of bombs around it
             if(this.getState()=="Bomb"){
                 Log.e("Game over","C fini");
+                // Fonction qui permet d'avertir que c'est finito, trigger le game over ?
             }
             else{
                 affichageValeur();
                 if (Integer.valueOf(this.value)==0)
                     ((MainActivity)getActivity()).emptyAround(this);
-                /*switch (Integer.valueOf(this.value)){
-                    case 0:
-                        this.cellImage.setImageResource(R.drawable.zero);
-                        // Check around
-                        ((MainActivity)getActivity()).emptyAround(this);
-                        break;
-                    case 1:
-                        this.cellImage.setImageResource(R.drawable.one);
-                        break;
-                    case 2:
-                        this.cellImage.setImageResource(R.drawable.two);
-                        break;
-                    case 3:
-                        this.cellImage.setImageResource(R.drawable.three);
-                        break;
-                    case 4:
-                        this.cellImage.setImageResource(R.drawable.four);
-                        break;
-                    case 5:
-                        this.cellImage.setImageResource(R.drawable.five);
-                        break;
-                    case 6:
-                        this.cellImage.setImageResource(R.drawable.six);
-                        break;
-                    case 7:
-                        this.cellImage.setImageResource(R.drawable.seven);
-                        break;
-                    case 8:
-                        this.cellImage.setImageResource(R.drawable.eight);
-                        break;
-                    default:
-                        // That's shit.
-
-                }*/
             }
+            ((MainActivity)getActivity()).endGame();
         });
         return view;
     }
@@ -128,7 +116,7 @@ public class FragCellule extends Fragment {
 
     public void becomeBomb(){
         setState("Bomb");
-        this.cellImage.setImageResource(R.drawable.bomb);
+        //this.cellImage.setImageResource(R.drawable.bomb);
     }
 
     public void affichageValeur(){
