@@ -24,6 +24,7 @@ public class FragCellule extends Fragment {
     private String state; // State of the cell (Hidden, Discovered or Bomb)
     private String value; // Number of bombs around
     private ImageView cellImage; // Is the cell image
+    private boolean gameOver = false;
 
     public FragCellule() {
         // Required empty public constructor
@@ -56,7 +57,8 @@ public class FragCellule extends Fragment {
         this.cellImage.setOnLongClickListener(v->{
             if(this.getState()=="Flagged"){
                 this.cellImage.setImageResource(R.drawable.facingdown);
-                this.setState("Hidden");
+                if(getValue()=="-1") this.setState("Bomb");
+                else this.setState("Hidden");
                 this.cellImage.getDrawable();
             }
             else{
@@ -65,31 +67,21 @@ public class FragCellule extends Fragment {
             }
 
 
-            ///
-            ///
-            /// A RETRAVAILLER POUR LA GESTION DE DRAPEAU SUR UNE BOMBE OU UNE VALEUR (CREER UNE ANCIENNE VALEUR STATIQUE)
-            ///
-            ///
-
             return true;
         });
         this.cellImage.setOnClickListener(v->{
-            // Check if the cell is already discovered
-            // If yes nothing
-            // If not :
-            //  If bomb Game Over and discovered
-            //  If 0 shows empty cells around
-            //  Else display the number of bombs around it
-            if(this.getState()=="Bomb"){
-                Log.e("Game over","C fini");
-                // Fonction qui permet d'avertir que c'est finito, trigger le game over ?
+            if(!gameOver){
+                if(this.getState()=="Bomb"){
+                    Log.e("Game over","C fini");
+                    ((MainActivity)getActivity()).gameOver();
+                }
+                else{
+                    affichageValeur();
+                    if (Integer.valueOf(this.value)==0)
+                        ((MainActivity)getActivity()).emptyAround(this);
+                }
+                ((MainActivity)getActivity()).endGame();
             }
-            else{
-                affichageValeur();
-                if (Integer.valueOf(this.value)==0)
-                    ((MainActivity)getActivity()).emptyAround(this);
-            }
-            ((MainActivity)getActivity()).endGame();
         });
         return view;
     }
@@ -116,7 +108,15 @@ public class FragCellule extends Fragment {
 
     public void becomeBomb(){
         setState("Bomb");
+        setValue("-1");
         //this.cellImage.setImageResource(R.drawable.bomb);
+    }
+
+    public void displayBomb(){
+        if(this.getState()=="Bomb"){
+            gameOver=true;
+            this.cellImage.setImageResource(R.drawable.bombinette);
+        }
     }
 
     public void affichageValeur(){
@@ -144,6 +144,9 @@ public class FragCellule extends Fragment {
                 break;
             case 7:
                 this.cellImage.setImageResource(R.drawable.seven);
+                break;
+            default:
+                this.cellImage.setImageResource(R.drawable.bombinette);
                 break;
         }
     }

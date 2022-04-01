@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout container;
     private ArrayList<FragLigne> listeLigne;
     private int difficulty;
-    private int heureDeb = 0;
-    private int minuteDeb = 0;
+    private long tStart;
     public static int width; // Width of the device
     public static int height; // Height of the device
     @Override
@@ -38,11 +37,10 @@ public class MainActivity extends AppCompatActivity {
         width = size.x;
         height = size.y;
         Calendar dt = Calendar.getInstance();
-        heureDeb = dt.get(Calendar.HOUR_OF_DAY);
-        minuteDeb = dt.get(Calendar.MINUTE);
+        tStart = System.currentTimeMillis();
         // Creating X rows
-        difficulty=1;
-        createGrid(16);
+        difficulty=0;
+        createGrid(7);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag: listeLigne) {
             ft.add(R.id.containerLigne,frag,null);
@@ -68,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(int difficulty){
-        int nbBombs = ((difficulty+1) *10);
+        //int nbBombs = ((difficulty+1) *10);
+        int nbBombs = 3;
         for (int i=0; i<nbBombs;i++) {
             while(!randomBombCell());
         }
@@ -185,6 +184,13 @@ public class MainActivity extends AppCompatActivity {
         return positions;
     }
 
+    public void gameOver(){
+        for(FragLigne ligne : this.listeLigne){
+            for(FragCellule cellule : ligne.getListCells()){
+                if(cellule.getValue()=="-1" && cellule.getState()=="Bomb") cellule.displayBomb();
+            }
+        }
+    }
     private boolean isNullCell(FragCellule cell){
         //Log.e("CELLULE VALEUR ",String.valueOf(cell.getValue()));
         if (cell.getValue().equals("0"))return true;
@@ -196,17 +202,14 @@ public class MainActivity extends AppCompatActivity {
         boolean finito = true;
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
-                if(cellule.getState()!="Bomb" && cellule.getState()!="Show") finito = false;
+                if(cellule.getValue()!="-1" && cellule.getState()!="Show"){
+                    finito = false;
+                }
             }
         }
         if(finito){
             Log.e("FINITO","GAME IS WON");
-            Calendar dt = Calendar.getInstance();
-            int heureDiff = dt.get(Calendar.HOUR_OF_DAY)- this.heureDeb;
-            heureDiff--;
-            int minuteDiff = dt.get(Calendar.MINUTE) - this.minuteDeb;
-            if(minuteDiff<0) minuteDiff+=60;
-            int timeSpent = heureDiff*60+minuteDiff;
+            long secondElapsed = (System.currentTimeMillis()-tStart)/1000;
 
             // TRUC POUR LANCER L ACTIVITE DE FIN DE GAME ET COMPTAGE DE SCORE
         }
