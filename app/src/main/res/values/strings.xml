@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">JeuFun</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facile">Facile</string>
+    <string name="normal">Normal</string>
+    <string name="difficile">Difficile</string>
+    <string name="nouvelle_partie">Nouvelle partie</string>
+    <string name="Title_Score_Des_Joueurs">Score des joueurs</string>
+    <string name="nom_joueur">Nom du joueur</string>
+    <string name="score_joueur">Score du joueur</string>
+    <string name="title_score_des_joueurs">Score des joueurs</string>
 </resources>
