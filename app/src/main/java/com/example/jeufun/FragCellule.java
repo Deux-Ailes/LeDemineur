@@ -120,6 +120,7 @@ public class FragCellule extends Fragment {
     }
 
     public void affichageValeur(){
+        this.state="Show";
         switch (Integer.valueOf(this.value)) {
             case 0:
                 this.cellImage.setImageResource(R.drawable.zero);

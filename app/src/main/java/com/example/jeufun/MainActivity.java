@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         Calendar dt = Calendar.getInstance();
         tStart = System.currentTimeMillis();
         // Creating X rows
-        difficulty=0;
-        createGrid(7);
+        difficulty=1;
+        createGrid(8);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag: listeLigne) {
             ft.add(R.id.containerLigne,frag,null);
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         setupBombs(difficulty);
         setupValues();
+
     }
 
     // Creates a grid of side * side size
@@ -66,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(int difficulty){
-        //int nbBombs = ((difficulty+1) *10);
-        int nbBombs = 3;
+        int nbBombs = ((difficulty+1) *10);
         for (int i=0; i<nbBombs;i++) {
             while(!randomBombCell());
         }
@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
             for(int j=minCol;j<maxCol+1;j++){
                 cell =listeLigne.get(i).getListCells().get(j);
                 if(cell.getState()!="Bomb" && cell.getState()!="Show"){
-                    cell.affichageValeur();
                     cell.setState("Show");
+                    cell.affichageValeur();
                     if (isNullCell(cell)) {
                         emptyAround(cell);
                         Log.e("CELLULE","VIDE");
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         boolean finito = true;
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
-                if(cellule.getValue()!="-1" && cellule.getState()!="Show"){
+                if(Integer.valueOf(cellule.getValue())>=0 && cellule.getState()!="Show" && cell!=cellule){
                     finito = false;
                 }
             }
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         if(finito){
             Log.e("FINITO","GAME IS WON");
             long secondElapsed = (System.currentTimeMillis()-tStart)/1000;
-
+            int eza = 0;
             // TRUC POUR LANCER L ACTIVITE DE FIN DE GAME ET COMPTAGE DE SCORE
         }
         else{
