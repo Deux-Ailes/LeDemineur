@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JeuFun">
         <activity
+            android:name=".Fin"
+            android:exported="false" />
+        <activity
+            android:name=".Menu"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

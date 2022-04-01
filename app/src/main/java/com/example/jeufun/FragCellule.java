@@ -80,7 +80,7 @@ public class FragCellule extends Fragment {
                     if (Integer.valueOf(this.value)==0)
                         ((MainActivity)getActivity()).emptyAround(this);
                 }
-                ((MainActivity)getActivity()).endGame();
+                ((MainActivity)getActivity()).endGame(this);
             }
         });
         return view;

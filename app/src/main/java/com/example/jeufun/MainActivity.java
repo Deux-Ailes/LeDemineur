@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void endGame(){
+    public void endGame(FragCellule cell){
         boolean finito = true;
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
