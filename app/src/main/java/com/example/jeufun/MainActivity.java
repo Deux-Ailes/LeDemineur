@@ -1,21 +1,20 @@
 package com.example.jeufun;
 
+import android.content.Intent;
+import android.graphics.Point;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.graphics.Point;
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.Display;
-import android.widget.LinearLayout;
-
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,10 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private long tStart;
     public static int width; // Width of the device
     public static int height; // Height of the device
+    private Button play;
+    private MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        play = findViewById(R.id.play);
+        mediaPlayer = MediaPlayer.create(this, R.raw.music);
+
         container = findViewById(R.id.containerLigne);
         listeLigne = new ArrayList<>();
         // Getting the global dimension of the device
@@ -41,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
         Calendar dt = Calendar.getInstance();
         tStart = System.currentTimeMillis();
         // Creating X rows
-        difficulty=1;
+        difficulty = 1;
         createGrid(8);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        for (FragLigne frag: listeLigne) {
-            ft.add(R.id.containerLigne,frag,null);
+        for (FragLigne frag : listeLigne) {
+            ft.add(R.id.containerLigne, frag, null);
         }
         ft.commit();
     }
@@ -55,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         setupBombs(difficulty);
         setupValues();
+
+        play.setOnClickListener(view -> {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+            }
+            else{
+                mediaPlayer.start();
+            }
+        });
 
     }
 
@@ -86,28 +101,29 @@ public class MainActivity extends AppCompatActivity {
         int maxCell = listeLigne.size();
         int randomCell = r.nextInt(maxCell);
         int randomRow = r2.nextInt(maxCell);
-        FragCellule frag = listeLigne.get(randomRow).getListCells().get(randomCell);
-        Log.e("La cellule visée en ", randomRow + ","+ randomCell + " ... " + String.valueOf(frag.getState()));
-        if(frag.getState()!="Bomb"){
-            frag.becomeBomb();
-            Log.e("gg","");
-            return true;
-        }else{
+        FragCellule frag;
+        frag = listeLigne.get(randomRow).getListCells().get(randomCell);
+        Log.e("La cellule visée en ", randomRow + ","+ randomCell + " ... " + frag.getState());
+        if (frag.getState().equals("Bomb")) {
             Log.e("Rip","");
             //randomBombCell(liste);
             return false;
+        } else {
+            frag.becomeBomb();
+            Log.e("gg","");
+            return true;
         }
     }
 
     private void setupValues(){
         int numLigne =0;
-        int numCell = 0;
+        int numCell;
         for (FragLigne ligne: listeLigne){
             numCell =0;
             for( FragCellule cellule: ligne.getListCells()){
                 int nbBombes = bombAround(numLigne,numCell);
                 Log.e("NbBombes",String.valueOf(nbBombes));
-                if(cellule.getState()!="Bomb") cellule.setValue(String.valueOf(nbBombes));
+                if(!cellule.getState().equals("Bomb")) cellule.setValue(String.valueOf(nbBombes));
                 else Log.e("Je suis une bombinette","");
                 numCell++;
             }
@@ -127,16 +143,15 @@ public class MainActivity extends AppCompatActivity {
         if(maxCol>listeLigne.get(0).getListCells().size()-1) maxCol = listeLigne.get(0).getListCells().size()-1;
         for(int i=minRow;i<maxRow+1;i++){
             for(int j=minCol;j<maxCol+1;j++){
-                if(listeLigne.get(i).getListCells().get(j).getState()=="Bomb") nombreBombes++;
+                if(listeLigne.get(i).getListCells().get(j).getState().equals("Bomb")) nombreBombes++;
             }
         }
         return nombreBombes;
     }
 
     public void emptyAround(FragCellule cellule){
-        int[] positionCellule = new int[2];
         int ligne; int colonne;
-        positionCellule = findCell(cellule);
+        int[] positionCellule = findCell(cellule);
         ligne = positionCellule[0];
         colonne = positionCellule[1];
         FragCellule cell;
@@ -152,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=minRow;i<maxRow+1;i++){
             for(int j=minCol;j<maxCol+1;j++){
                 cell =listeLigne.get(i).getListCells().get(j);
-                if(cell.getState()!="Bomb" && cell.getState()!="Show"){
+                if(!cell.getState().equals("Bomb") && !cell.getState().equals("Show")){
                     cell.setState("Show");
                     cell.affichageValeur();
                     if (isNullCell(cell)) {
@@ -170,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
     private int[] findCell(FragCellule cellule){
         int [] positions;
         positions = new int[2];
-        positions[0]=0;
         for(FragLigne ligne: listeLigne){
             positions[1]=0;
             for(FragCellule cell: ligne.getListCells()){
@@ -189,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
     public void gameOver(){
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
-                if(cellule.getValue()=="-1" && cellule.getState()=="Bomb") {
+                if (!cellule.getValue().equals("-1") || !cellule.getState().equals("Bomb")) {
+                } else {
                     cellule.displayBomb();
                     //Délai pour que l'utilisateur voit les bombes
 
@@ -203,8 +218,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private boolean isNullCell(FragCellule cell){
         //Log.e("CELLULE VALEUR ",String.valueOf(cell.getValue()));
-        if (cell.getValue().equals("0"))return true;
-        return false;
+        return cell.getValue().equals("0");
     }
 
 
@@ -212,9 +226,8 @@ public class MainActivity extends AppCompatActivity {
         boolean finito = true;
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
-                if(Integer.valueOf(cellule.getValue())>=0 && cellule.getState()!="Show" && cell!=cellule){
-                    finito = false;
-                }
+                if (Integer.parseInt(cellule.getValue()) < 0 || Objects.equals(cellule.getState(), "Show") || cell == cellule) {
+                } else finito = false;
             }
         }
         if(finito){
