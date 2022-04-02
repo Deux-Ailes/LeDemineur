@@ -9,4 +9,5 @@
     <string name="nom_joueur">Nom du joueur</string>
     <string name="score_joueur">Score du joueur</string>
     <string name="title_score_des_joueurs">Score des joueurs</string>
+    <string name="affichage">Affichage</string>
 </resources>

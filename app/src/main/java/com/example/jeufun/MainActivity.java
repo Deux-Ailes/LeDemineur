@@ -3,8 +3,10 @@ package com.example.jeufun;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.widget.LinearLayout;
@@ -187,7 +189,15 @@ public class MainActivity extends AppCompatActivity {
     public void gameOver(){
         for(FragLigne ligne : this.listeLigne){
             for(FragCellule cellule : ligne.getListCells()){
-                if(cellule.getValue()=="-1" && cellule.getState()=="Bomb") cellule.displayBomb();
+                if(cellule.getValue()=="-1" && cellule.getState()=="Bomb") {
+                    cellule.displayBomb();
+                    //Délai pour que l'utilisateur voit les bombes
+
+                    //SystemClock.sleep(3000);
+                    // On retourne sur l'écran de fin
+                    Intent intent = new Intent(MainActivity.this, Fin.class);
+                    startActivity(intent);
+                }
             }
         }
     }
@@ -209,9 +219,16 @@ public class MainActivity extends AppCompatActivity {
         }
         if(finito){
             Log.e("FINITO","GAME IS WON");
+            // Acquisition du temps
             long secondElapsed = (System.currentTimeMillis()-tStart)/1000;
-            int eza = 0;
-            // TRUC POUR LANCER L ACTIVITE DE FIN DE GAME ET COMPTAGE DE SCORE
+
+            // Préparation du bundle
+            Score monScore = new Score(secondElapsed,this.difficulty);
+            Intent intent = new Intent(MainActivity.this, Fin.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("SCORE", monScore);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
         else{
             Log.e("NOT FINITO","GAME IS NOT WON");
