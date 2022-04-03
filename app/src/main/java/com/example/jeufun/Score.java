@@ -13,9 +13,11 @@ public class Score implements Serializable {
 
     private final long seconds;
     private final int difficulty;
+    private final String pseudo;
 
-    public Score(long secondsElapsed, int difficulty){
+    public Score(long secondsElapsed, int difficulty, String pseudonyme){
         this.difficulty=difficulty;
         this.seconds=secondsElapsed;
+        this.pseudo = pseudonyme;
     }
 }
