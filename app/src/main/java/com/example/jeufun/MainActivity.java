@@ -20,41 +20,33 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private ArrayList<FragLigne> listLine;
-    private final int difficulty;
+    private int difficulty;
     private long tStart;
-    public static int width; // Width of the device
-    public static int height; // Height of the device
     private Button play;
     private MediaPlayer mediaPlayer;
-    private final String pseudo;
+    private String pseudo;
 
-    public MainActivity(int difficulty, String pseudonym){
-        this.difficulty = difficulty;
-        this.pseudo=pseudonym;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Récupération du bundle
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        Parametre p = (Parametre) bundle.getSerializable("PARAM");
+        this.pseudo = p.getPseudo();
+        this.difficulty = p.getDifficulte();
+
+        // Attribution des views aux vars
         play = findViewById(R.id.play);
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
 
         LinearLayout container = findViewById(R.id.containerLigne);
         listLine = new ArrayList<>();
-        // Getting the global dimension of the device
-        // in order to put the right size for the cells and rows
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        width = size.x;
-        height = size.y;
-        Calendar dt = Calendar.getInstance();
         tStart = System.currentTimeMillis();
-        // Creating X rows
-
-        createGrid(8);
+        createGrid((difficulty+1)*4);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag : listLine) {
             ft.add(R.id.containerLigne, frag, null);
@@ -76,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 mediaPlayer.start();
             }
         });
-
     }
 
     // Creates a grid of side * side size
@@ -90,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(int difficulty){
-        int nbBombs = ((difficulty+1) *10);
+        int nbBombs = ((difficulty+1) *1);
         for (int i=0; i<nbBombs;i++) {
             while(!randomBombCell());
         }

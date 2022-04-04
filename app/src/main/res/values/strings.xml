@@ -11,4 +11,6 @@
     <string name="title_score_des_joueurs">Score des joueurs</string>
     <string name="affichage">Affichage</string>
     <string name="Music">Music</string>
+    <string name="difficulte">Difficulté (Facile / Moyen / Difficile)</string>
+    <string name="pseudo">Pseudonyme</string>
 </resources>
