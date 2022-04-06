@@ -26,6 +26,7 @@ public class Menu extends AppCompatActivity {
     private AccessDonnees dataAccess;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+    private Intent serviceDeMusique;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +41,14 @@ public class Menu extends AppCompatActivity {
         prefs= getSharedPreferences("scores",MODE_PRIVATE);
         editor = prefs.edit();
         dataAccess = new AccessDonnees(prefs,editor);
+        serviceDeMusique = new Intent(this, ServiceDeMusique.class);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        startService(serviceDeMusique);
         gameStart.setVisibility(View.INVISIBLE); // Nécessaire pour cacher au tout début le bloc
 
         attributionScore();
@@ -84,6 +87,17 @@ public class Menu extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(serviceDeMusique); // A ne mettre que si l'on veut que la musique soit persistante jusqu'à ce que l'application soit terminée
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //  stopService(serviceDeMusique);  // A ne mettre que si l'on veut que la musique s'arrête dès que l'on quitte l'activité
     }
 
 

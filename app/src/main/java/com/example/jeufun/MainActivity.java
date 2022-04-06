@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private int difficulty;
     private long tStart;
     private Button play;
-    private MediaPlayer mediaPlayer;
     private String pseudo;
 
 
@@ -31,8 +30,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Récupération du bundle
+       // Récupération du bundle
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         Parametre p = (Parametre) bundle.getSerializable("PARAM");
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // Attribution des views aux vars
         play = findViewById(R.id.play);
-        mediaPlayer = MediaPlayer.create(this, R.raw.music);
+        //mediaPlayer = MediaPlayer.create(this, R.raw.music);
 
         LinearLayout container = findViewById(R.id.containerLigne);
         listLine = new ArrayList<>();
@@ -60,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setupBombs(difficulty);
         setupValues();
 
+        /*
         play.setOnClickListener(view -> {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
@@ -67,8 +66,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             else{
                 mediaPlayer.start();
             }
-        });
+        });*/
     }
+
 
     // Creates a grid of side * side size
     private void createGrid(int side){
