@@ -63,7 +63,7 @@ public class fragment_frag_scores extends Fragment {
         TextView pseudo = view.findViewById(R.id.text_Pseudo);
         TextView time = view.findViewById(R.id.text_Time);
         pseudo.setText(pseudonym);
-        time.setText(String.valueOf(this.time) + " sec");
+        time.setText(this.time + " sec");
         return view;
     }
 }

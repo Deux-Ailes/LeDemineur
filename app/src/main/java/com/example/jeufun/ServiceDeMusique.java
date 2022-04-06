@@ -3,15 +3,15 @@ package com.example.jeufun;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Handler;
 import android.os.IBinder;
 
 public class ServiceDeMusique extends Service {
     private MediaPlayer maMusique;
 
-    public ServiceDeMusique(){
+    public ServiceDeMusique() {
 
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.

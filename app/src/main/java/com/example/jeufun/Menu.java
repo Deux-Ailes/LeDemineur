@@ -1,9 +1,5 @@
 package com.example.jeufun;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,9 +38,9 @@ public class Menu extends AppCompatActivity {
         this.screenSelector = findViewById(R.id.divScores);
         gameStart = findViewById(R.id.divGame);
         displayScore = findViewById(R.id.displayScore);
-        prefs= getSharedPreferences("scores",MODE_PRIVATE);
+        prefs = getSharedPreferences("scores", MODE_PRIVATE);
         editor = prefs.edit();
-        dataAccess = new AccessDonnees(prefs,editor);
+        dataAccess = new AccessDonnees(prefs, editor);
         serviceDeMusique = new Intent(this, ServiceDeMusique.class);
 
     }
@@ -88,6 +88,7 @@ public class Menu extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -101,22 +102,22 @@ public class Menu extends AppCompatActivity {
     }
 
 
-    private void attributionScore(){
+    private void attributionScore() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Les fragments initialisés
-        for(int i=0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             ArrayList<Score> liste = dataAccess.getScores(i);
             int id = R.id.afficheEz;
-            if(i==1){
+            if (i == 1) {
                 id = R.id.afficheMed;
-            }else if(i==2){
+            } else if (i == 2) {
                 id = R.id.afficheHard;
             }
             // Tri en fonction du temps
-            if(liste!=null) {
-                liste.sort(Comparator.<Score>comparingLong(Score::getSeconds));
+            if (liste != null) {
+                liste.sort(Comparator.comparingLong(Score::getSeconds));
                 for (Score score : liste) {
-                    fragment_frag_scores frag = fragment_frag_scores.newInstance(score.getPseudo(),score.getSeconds());
+                    fragment_frag_scores frag = fragment_frag_scores.newInstance(score.getPseudo(), score.getSeconds());
                     ft.add(id, frag);
                 }
             }

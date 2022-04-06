@@ -1,14 +1,12 @@
-
 package com.example.jeufun;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
@@ -28,6 +26,7 @@ public class FragLigne extends Fragment {
     private int nombreCellules;
     private int numeroLigne;
     private ArrayList<FragCellule> listeCellule;
+
     public FragLigne() {
         // Required empty public constructor
     }
@@ -36,7 +35,6 @@ public class FragLigne extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment FragLigne.
      */
     // TODO: Rename and change types and number of parameters
@@ -67,18 +65,18 @@ public class FragLigne extends Fragment {
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         listeCellule = new ArrayList<>();
         //Cell creations
-        for (int i=0; i<this.nombreCellules;i++){
+        for (int i = 0; i < this.nombreCellules; i++) {
             // Creating there the cells with passiv state. Instanciation
-            listeCellule.add(FragCellule.newInstance("Hidden",""));
+            listeCellule.add(FragCellule.newInstance("Hidden", ""));
         }
-        for (FragCellule frag: listeCellule) {
-            ft.add(R.id.containerCellule,frag,null);
+        for (FragCellule frag : listeCellule) {
+            ft.add(R.id.containerCellule, frag, null);
         }
         ft.commit();
         return view;
     }
 
-    public ArrayList<FragCellule> getListCells(){
+    public ArrayList<FragCellule> getListCells() {
         return this.listeCellule;
     }
 }

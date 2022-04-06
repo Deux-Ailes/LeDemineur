@@ -1,14 +1,13 @@
 package com.example.jeufun;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,14 +53,13 @@ public class FragCellule extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_frag_cellule, container, false);
         this.cellImage = view.findViewById(R.id.cell);
-        this.cellImage.setOnLongClickListener(v->{
-            if(this.getState()=="Flagged"){
+        this.cellImage.setOnLongClickListener(v -> {
+            if (this.getState() == "Flagged") {
                 this.cellImage.setImageResource(R.drawable.facingdown);
-                if(getValue()=="-1") this.setState("Bomb");
+                if (getValue() == "-1") this.setState("Bomb");
                 else this.setState("Hidden");
                 this.cellImage.getDrawable();
-            }
-            else{
+            } else {
                 this.cellImage.setImageResource(R.drawable.flagged);
                 this.setState("Flagged");
             }
@@ -69,58 +67,57 @@ public class FragCellule extends Fragment {
 
             return true;
         });
-        this.cellImage.setOnClickListener(v->{
-            if(!gameOver){
-                if(this.getState()=="Bomb"){
-                    Log.e("Game over","C fini");
-                    ((MainActivity)getActivity()).gameOver();
-                }
-                else{
+        this.cellImage.setOnClickListener(v -> {
+            if (!gameOver) {
+                if (this.getState() == "Bomb") {
+                    Log.e("Game over", "C fini");
+                    ((MainActivity) getActivity()).gameOver();
+                } else {
                     affichageValeur();
-                    if (Integer.valueOf(this.value)==0)
-                        ((MainActivity)getActivity()).emptyAround(this);
+                    if (Integer.valueOf(this.value) == 0)
+                        ((MainActivity) getActivity()).emptyAround(this);
                 }
-                ((MainActivity)getActivity()).endGame(this);
+                ((MainActivity) getActivity()).endGame(this);
             }
         });
         return view;
     }
 
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 
-    public void setValue(String valeur){
+    public void setValue(String valeur) {
         this.value = valeur;
     }
 
-    public String getState(){
+    public String getState() {
         return this.state;
     }
 
-    public void setState(String state){
+    public void setState(String state) {
         this.state = state;
-        if(state == "Show"){
+        if (state == "Show") {
             affichageValeur();
         }
     }
 
-    public void becomeBomb(){
+    public void becomeBomb() {
         setState("Bomb");
         setValue("-1");
         //this.cellImage.setImageResource(R.drawable.bomb);
     }
 
-    public void displayBomb(){
-        if(this.getState()=="Bomb"){
-            gameOver=true;
+    public void displayBomb() {
+        if (this.getState() == "Bomb") {
+            gameOver = true;
             this.cellImage.setImageResource(R.drawable.bombinette);
         }
     }
 
-    public void affichageValeur(){
-        this.state="Show";
+    public void affichageValeur() {
+        this.state = "Show";
         switch (Integer.valueOf(this.value)) {
             case 0:
                 this.cellImage.setImageResource(R.drawable.zero);
