@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="163dp"
             android:layout_marginTop="38dp"
-            android:text="Button"
+            android:text="@string/jouer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inPutDiff2" />
 
@@ -86,13 +86,15 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="EzContainer">
+                android:contentDescription="@string/ezcontainer">
 
                 <LinearLayout
                     android:id="@+id/afficheEz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
@@ -113,13 +115,15 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="MedContainer">
+                android:contentDescription="@string/medcontainer">
 
                 <LinearLayout
                     android:id="@+id/afficheMed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
@@ -146,7 +150,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:contentDescription="HardContainer"></LinearLayout>
+                    android:contentDescription="@string/hardcontainer">
+
+                </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
@@ -168,7 +174,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
         android:layout_marginEnd="70dp"
-        android:text="Scores"
+        android:text="@string/scores"
         app:layout_constraintEnd_toStartOf="@+id/textView9"
         app:layout_constraintTop_toTopOf="parent" />
 
