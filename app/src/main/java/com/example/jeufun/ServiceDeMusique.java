@@ -4,9 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.widget.Button;
 
 public class ServiceDeMusique extends Service {
-    private MediaPlayer maMusique;
+    public static MediaPlayer maMusique;
+    private static int counter;
 
     public ServiceDeMusique() {
 
@@ -25,9 +27,17 @@ public class ServiceDeMusique extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (counter != 0){
+            this.onDestroy();
+        }
+        else  {
+            counter++;
+        }
         maMusique = MediaPlayer.create(this, R.raw.music);  // Setup de la musique, attribution d'un MediaPlayer à la variable locale
         maMusique.setLooping(true);                                // On fait tourner la musique en boucle
-        maMusique.start();                                          // On lance la musique
+        maMusique.start();                                         // On lance la musique
+
+
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -15,4 +15,9 @@
     <string name="pseudo">Pseudonyme</string>
     <string name="gg">Bien joué, tu as gagné !</string>
     <string name="pasdpo">Bien tenté, essaye encore</string>
+    <string name="ezcontainer">EzContainer</string>
+    <string name="medcontainer">MedContainer</string>
+    <string name="hardcontainer">HardContainer</string>
+    <string name="scores">Scores</string>
+    <string name="jouer">Jouer</string>
 </resources>

@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // Attribution des views aux vars
         play = findViewById(R.id.play);
-        //mediaPlayer = MediaPlayer.create(this, R.raw.music);
 
         LinearLayout container = findViewById(R.id.containerLigne);
         listLine = new ArrayList<>();
@@ -46,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             ft.add(R.id.containerLigne, frag, null);
         }
         ft.commit();
+
+        play.setOnClickListener(view -> {
+            if (ServiceDeMusique.maMusique.isPlaying()) {
+                ServiceDeMusique.maMusique.pause();
+            }
+            else{
+                ServiceDeMusique.maMusique.start();
+            }
+        });
     }
 
     @Override
@@ -53,16 +61,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         super.onResume();
         setupBombs(difficulty);
         setupValues();
-
-        /*
-        play.setOnClickListener(view -> {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-            }
-            else{
-                mediaPlayer.start();
-            }
-        });*/
     }
 
 
@@ -77,15 +75,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(int difficulty) {
-        int nbBombs = ((difficulty + 1) * 1);
+        int nbBombs = ((difficulty + 1));
         for (int i = 0; i < nbBombs; i++) {
             while (!randomBombCell()) ;
         }
-    }
-
-    // Launch a new activity to select difficulty and show highest scores (5)
-    private void selectDifficulty() {
-
     }
 
     private boolean randomBombCell() {
@@ -213,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private boolean isNullCell(FragCellule cell) {
-        //Log.e("CELLULE VALEUR ",String.valueOf(cell.getValue()));
         return cell.getValue().equals("0");
     }
 
@@ -227,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         }
         if (finito) {
-            Log.e("FINITO", "GAME IS WON");
             // Acquisition du temps
             long secondElapsed = (System.currentTimeMillis() - tStart) / 1000;
 
@@ -238,8 +229,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             bundle.putSerializable("SCORE", monScore);
             intent.putExtras(bundle);
             startActivity(intent);
-        } else {
-            Log.e("NOT FINITO", "GAME IS NOT WON");
         }
     }
 }
