@@ -12,7 +12,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
-
+/**
+ *
+ * Démineur composé par Elliot Clerice, Simon Meinard et Tony Pasquier
+ * Github disponible ici : https://github.com/Deux-Ailes/LeDemineur
+ *
+ */
 public class MainActivity extends AppCompatActivity implements Serializable {
     private ArrayList<FragLigne> listLine;
     private int difficulty;

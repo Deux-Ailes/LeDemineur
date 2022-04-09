@@ -21,6 +21,7 @@
     <string name="scores">Voir les scores</string>
     <string name="jouer">Jouer</string>
     <string name="rejouer">Rejouer</string>
+    <string name="oui">J existe</string>
     <string name="demineur">Démineur</string>
     <string name="Bienvenue">Bienvenue jeune démineur</string>
     <string name="tuto">Comment jouer ?</string>

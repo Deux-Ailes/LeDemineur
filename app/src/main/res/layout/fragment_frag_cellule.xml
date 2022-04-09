@@ -14,6 +14,8 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/facingdown"
-        tools:src="@tools:sample/avatars" />
+        tools:ignore="ImageContrastCheck"
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="@string/desc_case"/>
 
 </FrameLayout>

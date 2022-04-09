@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tuto">
@@ -14,7 +13,8 @@
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/flagged" />
+        app:srcCompat="@drawable/flagged"
+        android:contentDescription="@string/oui"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -24,7 +24,8 @@
         android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        app:srcCompat="@drawable/four" />
+        app:srcCompat="@drawable/four"
+        android:contentDescription="@string/oui"/>
 
     <ImageView
         android:id="@+id/imageView3"
@@ -34,7 +35,8 @@
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView7"
-        app:srcCompat="@drawable/bombinette" />
+        app:srcCompat="@drawable/bombinette"
+        android:contentDescription="@string/oui"/>
 
     <ImageView
         android:id="@+id/imageView4"
@@ -44,7 +46,8 @@
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/facingdown" />
+        app:srcCompat="@drawable/facingdown"
+        android:contentDescription="@string/oui"/>
 
     <ImageView
         android:id="@+id/imageView7"
@@ -54,7 +57,8 @@
         android:layout_marginTop="76dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        app:srcCompat="@drawable/zero" />
+        app:srcCompat="@drawable/zero"
+        android:contentDescription="@string/oui"/>
 
     <TextView
         android:id="@+id/textView11"
