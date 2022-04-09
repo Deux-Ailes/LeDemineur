@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JeuFun</string>
+    <string name="app_name">Minesweeper Demineur</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facile">Facile</string>
     <string name="normal">Normal</string>
@@ -18,6 +18,15 @@
     <string name="ezcontainer">EzContainer</string>
     <string name="medcontainer">MedContainer</string>
     <string name="hardcontainer">HardContainer</string>
-    <string name="scores">Scores</string>
+    <string name="scores">Voir les scores</string>
     <string name="jouer">Jouer</string>
+    <string name="rejouer">Rejouer</string>
+    <string name="demineur">Démineur</string>
+    <string name="Bienvenue">Bienvenue jeune démineur</string>
+    <string name="tuto">Comment jouer ?</string>
+    <string name="desc_case">Ceci est une case. Cliquez dessus rapidement pour afficher ce qui se cache sous la case ou bien appuyez longtemps pour mettre un drapeau là où vous pensez que des bombes se cachent.</string>
+    <string name="desc_chiffre">Le chiffre indique le nombre de bombes autour de la case à 1 case de distance. Si le fond est vide, cela signifie qu il n y a aucune bombe autour.</string>
+    <string name="desc_bombe">Ceci est une bombe.\nQuand vous la touchez, vous perdez la partie.</string>
+    <string name="desc_drapeau">Ceci est un drapeau. Vous pouvez en positionner là où vous pensez que des bombes se cachent.</string>
+    <string name="desc_gg">CONDITIONS DE VICTOIRE :\nLa partie se termine quand vous cliquez sur une bombe ou que toutes les cases qui ne sont pas des bombes sont découvertes. \n Cliquez n importe où pour quitter le tutoriel.</string>
 </resources>

@@ -58,7 +58,7 @@ public class fragment_frag_scores extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Rien de bien transcendant ou novateur
         View view = inflater.inflate(R.layout.fragment_frag_scores, container, false);
         TextView pseudo = view.findViewById(R.id.text_Pseudo);
         TextView time = view.findViewById(R.id.text_Time);

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/originalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Menu">
@@ -22,9 +23,9 @@
             android:layout_marginStart="100dp"
             android:layout_marginTop="21dp"
             android:ems="10"
+            android:hint="@string/pseudo"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:hint="@string/pseudo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/seekBar3" />
 
@@ -149,8 +150,8 @@
                     android:id="@+id/afficheHard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:contentDescription="@string/hardcontainer">
+                    android:contentDescription="@string/hardcontainer"
+                    android:orientation="vertical">
 
                 </LinearLayout>
             </ScrollView>
@@ -158,34 +159,56 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="105dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/scores"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/btn_Jouer" />
+
     <SeekBar
         android:id="@+id/divScores"
         android:layout_width="157dp"
         android:layout_height="26dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="127dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="120dp"
         android:max="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="70dp"
-        android:text="@string/scores"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="92dp"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="120dp"
         android:text="@string/nouvelle_partie"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="109dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/demineur"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_Jouer"
+        android:layout_width="123dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="11dp"
+        android:text="@string/tuto"
+        android:textSize="8sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

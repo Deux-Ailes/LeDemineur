@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private ArrayList<FragLigne> listLine;
     private int difficulty;
     private long tStart;
-    private Button play;
     private String pseudo;
 
 
@@ -29,17 +27,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Récupération du bundle
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        Parametre p = (Parametre) bundle.getSerializable("PARAM");
+        Parameters p = (Parameters) bundle.getSerializable("PARAM");
         this.pseudo = p.getPseudo();
-        this.difficulty = p.getDifficulte();
-
+        this.difficulty = p.getDifficulty();
+        //
+        tStart = System.currentTimeMillis(); // On récupère le temps auquel l'activité est lancée
         // Attribution des views aux vars
-        play = findViewById(R.id.play);
-
-        LinearLayout container = findViewById(R.id.containerLigne);
+        Button play = findViewById(R.id.play);
+        // Fragments à gogo
         listLine = new ArrayList<>();
-        tStart = System.currentTimeMillis();
-        createGrid((difficulty + 1) * 4);
+        createGrid((difficulty + 1) * 4); // Création d'une grille selon la difficulté
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (FragLigne frag : listLine) {
             ft.add(R.id.containerLigne, frag, null);
@@ -75,12 +72,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     // Set up all the bombs according to the difficulty level
     // 0 : EASY / 1 : MEDIUM / 2 : HARD
     private void setupBombs(int difficulty) {
-        int nbBombs = ((difficulty + 1));
+        int nbBombs = ((difficulty + 1)*3);
         for (int i = 0; i < nbBombs; i++) {
             while (!randomBombCell()) ;
         }
     }
 
+    /**
+     * Permet de transformer une cellule en bombe.
+     * @return Boolean si la cellule est devenue une bombe
+     */
     private boolean randomBombCell() {
         Random r = new Random();
         Random r2 = new Random();
@@ -89,10 +90,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         int randomRow = r2.nextInt(maxCell);
         FragCellule frag;
         frag = listLine.get(randomRow).getListCells().get(randomCell);
-        Log.e("La cellule visée en ", randomRow + "," + randomCell + " ... " + frag.getState());
         if (frag.getState().equals("Bomb")) {
             Log.e("Rip", "");
-            //randomBombCell(liste);
             return false;
         } else {
             frag.becomeBomb();
@@ -101,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
+    /**
+     * Met en place la valeur des bombes en fonction du nombre de bombes autour
+     */
     private void setupValues() {
         int numLigne = 0;
         int numCell;
@@ -108,15 +110,19 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             numCell = 0;
             for (FragCellule cellule : ligne.getListCells()) {
                 int nbBombes = bombAround(numLigne, numCell);
-                Log.e("NbBombes", String.valueOf(nbBombes));
                 if (!cellule.getState().equals("Bomb")) cellule.setValue(String.valueOf(nbBombes));
-                else Log.e("Je suis une bombinette", "");
                 numCell++;
             }
             numLigne++;
         }
     }
 
+    /**
+     *  Renseigne le nombre de bombes autour d'une cellule
+     * @param numLignes Numéro de ligne sur lequel est positionné la cellule
+     * @param numCell Numéro de colonne sur lequel est positionné la cellule
+     * @return Le nombre de bombes autour
+     */
     private int bombAround(int numLignes, int numCell) {
         int nombreBombes = 0;
         int minRow = numLignes - 1;
@@ -143,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         ligne = positionCellule[0];
         colonne = positionCellule[1];
         FragCellule cell;
+        // Algorithme ennuyant pour savoir si l'on est au bord de la grille ou non
         int minRow = ligne - 1;
         if (minRow < 0) minRow = 0;
         int maxRow = ligne + 1;
@@ -150,17 +157,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         int minCol = colonne - 1;
         if (minCol < 0) minCol = 0;
         int maxCol = colonne + 1;
-        if (maxCol > listLine.get(0).getListCells().size() - 1)
-            maxCol = listLine.get(0).getListCells().size() - 1;
-        //Log.e("Position", String.valueOf(positionCellule[0]) + "," + String.valueOf(positionCellule[1]));
+        if (maxCol > listLine.get(0).getListCells().size() - 1) maxCol = listLine.get(0).getListCells().size() - 1;
+        // Fin de l'algorithme ennuyant
         for (int i = minRow; i < maxRow + 1; i++) {
             for (int j = minCol; j < maxCol + 1; j++) {
                 cell = listLine.get(i).getListCells().get(j);
-                if (!cell.getState().equals("Bomb") && !cell.getState().equals("Show")) {
-                    cell.setState("Show");
-                    cell.affichageValeur();
-                    if (isNullCell(cell)) {
-                        emptyAround(cell);
+                if (!cell.getState().equals("Bomb") && !cell.getState().equals("Show")) { // Si la cellule n'est pas une bombe ou affichée
+                    cell.setState("Show");  // Alors on change son état à "Show"
+                    cell.affichageValeur(); // Et on affiche sa valeur
+                    if (isNullCell(cell)) { // Si la cellule est nulle
+                        emptyAround(cell);  // Alors on effectue la méthode sur cette nouvelle cellule
                         Log.e("CELLULE", "VIDE");
                     } else {
                         Log.e("CELLULE", "PAS VIDE");
@@ -170,9 +176,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
+
+    /**
+     * Renseigne la position d'une cellule fournie en paramètre
+     * @param cellule Cellule à trouver
+     * @return [ligne, colonne]
+     */
     private int[] findCell(FragCellule cellule) {
         int[] positions;
         positions = new int[2];
+        // Parcours d'un tableau de tableau
         for (FragLigne ligne : listLine) {
             positions[1] = 0;
             for (FragCellule cell : ligne.getListCells()) {
@@ -184,10 +197,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
             positions[0]++;
         }
-
         return positions;
     }
 
+    /**
+     * Appelée lorsqu'une bombe est touchée
+     * Lance l'activité de fin
+     */
     public void gameOver() {
         for (FragLigne ligne : this.listLine) {
             for (FragCellule cellule : ligne.getListCells()) {
@@ -195,8 +211,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 } else {
                     cellule.displayBomb();
                     //Délai pour que l'utilisateur voit les bombes
-
-                    //SystemClock.sleep(3000);
                     // On retourne sur l'écran de fin
                     Intent intent = new Intent(MainActivity.this, Fin.class);
                     startActivity(intent);
@@ -205,17 +219,28 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
+    /**
+     * Indique si une cellule est nulle ou non
+     * @param cell Cellule à étudier
+     * @return boolean si la cellule est nulle
+     */
     private boolean isNullCell(FragCellule cell) {
         return cell.getValue().equals("0");
     }
 
 
+    /**
+     * Vérifie si toutes les cellules qui ne sont pas des bombes ont été affichées
+     * Si oui, lance l'écran de fin
+     * @param cell Cellule qui a trigger le endGame
+     */
     public void endGame(FragCellule cell) {
         boolean finito = true;
-        for (FragLigne ligne : this.listLine) {
-            for (FragCellule cellule : ligne.getListCells()) {
-                if (Integer.parseInt(cellule.getValue()) < 0 || Objects.equals(cellule.getState(), "Show") || cell == cellule) {
-                } else finito = false;
+        // Parcours du tableau
+        for (FragLigne line : this.listLine) {
+            for (FragCellule cellular : line.getListCells()) {
+                if (Integer.parseInt(cellular.getValue()) < 0 || Objects.equals(cellular.getState(), "Show") || cell == cellular) {
+                } else finito = false; // Si l'une des cases non-bombe est cachée, alors ce n'est pas fini
             }
         }
         if (finito) {

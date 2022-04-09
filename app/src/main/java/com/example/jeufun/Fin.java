@@ -27,7 +27,7 @@ public class Fin extends AppCompatActivity {
         victoryDefeat = findViewById(R.id.victoireDefaite);
         SharedPreferences prefs = getSharedPreferences("scores", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        dataAccess = new AccessDonnees(prefs, editor);
+        dataAccess = new AccessDonnees(prefs, editor);                                  // Objet qui permet de communiquer avec les SharedPreferences
     }
 
     @Override
@@ -35,40 +35,42 @@ public class Fin extends AppCompatActivity {
         super.onResume();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        boolean victory = false;
+        boolean victory = false; // Indique si l'on a gagné
         if (bundle != null) {
-            victory = true;
+            victory = true; // Avoir un bundle est signe de victoire
             Score s = (Score) bundle.getSerializable("SCORE");
-            dataAccess.ecritureScore(s);
+            dataAccess.writingScore(s); // On sauvegarde le score issu du bundle
         }
 
         // Mise en forme
         if (victory) victoryDefeat.setText(R.string.gg);
         else victoryDefeat.setText(R.string.pasdpo);
 
-
+        // Fragments
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        // Les fragments initialisés
+
+        // Pour chaque difficulté (0 à 2)
         for (int i = 0; i < 3; i++) {
-            ArrayList<Score> liste = dataAccess.getScores(i);
+            ArrayList<Score> list = dataAccess.getScores(i);
+            // Attribution d'un container selon la difficulté
             int id = R.id.ez;
             if (i == 1) {
                 id = R.id.med;
             } else if (i == 2) {
                 id = R.id.hard;
             }
-            // Tri en fonction du temps
-            if (liste != null) {
-                liste.sort(Comparator.comparingLong(Score::getSeconds));
-                for (Score score : liste) {
+            // Tri en fonction du temps + vérification
+            if (list != null) {
+                list.sort(Comparator.comparingLong(Score::getSeconds));
+                for (Score score : list) {
                     fragment_frag_scores frag = fragment_frag_scores.newInstance(score.getPseudo(), score.getSeconds());
                     ft.add(id, frag);
                 }
             }
         }
-        ft.commit();
+        ft.commit(); // Commit final une fois que tout a été ajouté
 
-
+        // Bouton retour
         btnReplay.setOnClickListener(v -> {
             Intent monIntent = new Intent(this, Menu.class);
             startActivity(monIntent);

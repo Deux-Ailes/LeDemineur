@@ -37,7 +37,6 @@ public class FragLigne extends Fragment {
      *
      * @return A new instance of fragment FragLigne.
      */
-    // TODO: Rename and change types and number of parameters
     public static FragLigne newInstance(int nbCelluless, int numLignee) {
         FragLigne fragment = new FragLigne();
         Bundle args = new Bundle();
@@ -62,11 +61,12 @@ public class FragLigne extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_frag_ligne, container, false);
+        // Création des fragments
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         listeCellule = new ArrayList<>();
         //Cell creations
         for (int i = 0; i < this.nombreCellules; i++) {
-            // Creating there the cells with passiv state. Instanciation
+            // Création de cellules sans valeur et avec le statut Hidden
             listeCellule.add(FragCellule.newInstance("Hidden", ""));
         }
         for (FragCellule frag : listeCellule) {

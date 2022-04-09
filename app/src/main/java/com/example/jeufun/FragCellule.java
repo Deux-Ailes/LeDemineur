@@ -54,30 +54,28 @@ public class FragCellule extends Fragment {
         View view = inflater.inflate(R.layout.fragment_frag_cellule, container, false);
         this.cellImage = view.findViewById(R.id.cell);
         this.cellImage.setOnLongClickListener(v -> {
-            if (this.getState() == "Flagged") {
-                this.cellImage.setImageResource(R.drawable.facingdown);
-                if (getValue() == "-1") this.setState("Bomb");
-                else this.setState("Hidden");
-                this.cellImage.getDrawable();
-            } else {
-                this.cellImage.setImageResource(R.drawable.flagged);
-                this.setState("Flagged");
+            // Lorsqu'on veut mettre un drapeau
+            if (this.getState() == "Flagged") { // Si anciennement un drapeau
+                this.cellImage.setImageResource(R.drawable.facingdown); // On remet l'image d'une case cachée
+                if (getValue() == "-1") this.setState("Bomb");          // S'il s'agit d'une bombe, on remet son état à Bomb
+                else this.setState("Hidden");                           // Sinon on met l'état à Hidden
+            } else {                            // Sinon
+                this.cellImage.setImageResource(R.drawable.flagged);    //On affiche un drapeau
+                this.setState("Flagged");                               // Et on met l'état à "Flagged"
             }
-
-
             return true;
         });
+
         this.cellImage.setOnClickListener(v -> {
-            if (!gameOver) {
-                if (this.getState() == "Bomb") {
-                    Log.e("Game over", "C fini");
-                    ((MainActivity) getActivity()).gameOver();
+            if (!gameOver) { // TODO Game Over pas utilisé, à finir d'implementer
+                if (this.getState() == "Bomb") {    // Si l'on clique sur une bombe
+                    ((MainActivity) getActivity()).gameOver();  // Game Over
                 } else {
-                    affichageValeur();
-                    if (Integer.valueOf(this.value) == 0)
-                        ((MainActivity) getActivity()).emptyAround(this);
+                    affichageValeur();  // Sinon on affiche la valeur à l'écran
+                    if (Integer.valueOf(this.value) == 0)   // S'il s'agit d'une case qui n'a pas de bombes autour
+                        ((MainActivity) getActivity()).emptyAround(this); // On lance la méthode dans la mainActivity
                 }
-                ((MainActivity) getActivity()).endGame(this);
+                ((MainActivity) getActivity()).endGame(this);   // On vérifie si à l'issue du clic il reste des cases. Un observer aurait pu être utilisé plutôt que cela
             }
         });
         return view;
@@ -106,7 +104,6 @@ public class FragCellule extends Fragment {
     public void becomeBomb() {
         setState("Bomb");
         setValue("-1");
-        //this.cellImage.setImageResource(R.drawable.bomb);
     }
 
     public void displayBomb() {
@@ -116,6 +113,9 @@ public class FragCellule extends Fragment {
         }
     }
 
+    /**
+     * Modifie l'état de la cellule à Show et affiche la valeur de la cellule
+     */
     public void affichageValeur() {
         this.state = "Show";
         switch (Integer.valueOf(this.value)) {
